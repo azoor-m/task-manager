@@ -1,0 +1,22 @@
+<section class="login-layout">
+  <div class="login-intro">
+    <span class="eyebrow">YOUR WORK, IN FOCUS</span>
+    <h1>Make room for<br /><span>meaningful work.</span></h1>
+    <p>A clear view of what needs doing, what’s in progress, and what’s already done.</p>
+    <div class="intro-note"><span class="note-dot"></span> A calmer way to move work forward</div>
+  </div>
+  <form class="login-card" (ngSubmit)="submit()">
+    <div class="card-icon">↗</div>
+    <h2>Welcome back</h2>
+    <p class="muted">Sign in to continue to your workspace.</p>
+    <label for="username">Username</label>
+    <input id="username" name="username" [(ngModel)]="username" autocomplete="username" required placeholder="Your username" />
+    <label for="password">Password</label>
+    <input id="password" name="password" [(ngModel)]="password" type="password" autocomplete="current-password" required placeholder="Your password" />
+    @if (error) { <p class="error-message" role="alert">{{ error }}</p> }
+    <button class="primary-button login-button" type="submit" [disabled]="submitting">
+      {{ submitting ? 'Signing in…' : 'Sign in' }} <span aria-hidden="true">→</span>
+    </button>
+    <p class="secure-note"><span aria-hidden="true">▣</span> Your workspace is protected</p>
+  </form>
+</section>

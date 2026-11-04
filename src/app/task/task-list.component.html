@@ -1,0 +1,32 @@
+<section class="workspace">
+  <div class="heading-row">
+    <div><span class="eyebrow">OVERVIEW</span><h1>Your tasks<span class="heading-period">.</span></h1><p class="muted">Keep track of the work that matters.</p></div>
+    <label class="filter-control" for="status-filter"><span>FILTER BY STATUS</span>
+      <select id="status-filter" name="status" [ngModel]="statusFilter" (ngModelChange)="statusFilterChange.emit($event)">
+        <option value="">All statuses</option>
+        @for (status of statuses; track status) { <option [value]="status">{{ formatStatus(status) }}</option> }
+      </select>
+    </label>
+  </div>
+  @if (error) { <div class="error-banner" role="alert"><span>!</span>{{ error }}</div> }
+  <section class="task-panel" aria-label="Task list">
+    <div class="panel-heading"><div><h2>Task list</h2><span class="muted">{{ tasks.length }} {{ tasks.length === 1 ? 'task' : 'tasks' }}</span></div><span class="list-indicator"><i></i> LIVE LIST</span></div>
+    <div class="task-grid task-grid-head"><span>TASK</span><span>ASSIGNEE</span><span>STATUS</span><span>DUE DATE</span><span></span></div>
+    @if (loading) {
+      <div class="empty-state"><span class="spinner"></span><p>Loading your tasks…</p></div>
+    } @else if (tasks.length === 0) {
+      <div class="empty-state"><span class="empty-icon">✓</span><h3>All clear</h3><p>No tasks match this view.</p></div>
+    } @else {
+      @for (task of tasks; track task.id) {
+        <article class="task-grid task-row">
+          <div class="task-name"><span class="task-check" aria-hidden="true"></span><strong>{{ task.title }}</strong></div>
+          <span class="assignee"><span class="avatar">{{ (task.assignee || '?').slice(0, 1).toUpperCase() }}</span>{{ task.assignee || 'Unassigned' }}</span>
+          <span><span class="status-pill" [class.todo]="task.status === 'TODO'" [class.in-progress]="task.status === 'IN_PROGRESS'" [class.done]="task.status === 'DONE'"><i></i>{{ formatStatus(task.status) }}</span></span>
+          <time class="due-date" [attr.datetime]="task.dueDate">{{ task.dueDate | date:'MMM d, y' }}</time>
+          <span class="action-cell">@if (task.status !== 'DONE') { <button type="button" class="advance-button" (click)="advance.emit(task)" [attr.aria-label]="'Move ' + task.title + ' to next status'">Next <span aria-hidden="true">→</span></button> }</span>
+        </article>
+      }
+    }
+  </section>
+  <p class="workspace-footnote">Showing tasks from your workspace · Status updates are saved instantly</p>
+</section>
